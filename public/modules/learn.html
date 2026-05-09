@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>learn.equipA — equipA.kiwi</title>
+  <meta name="description" content="Capturing the specialist knowledge of New Zealand's retiring industrial operators and transferring it to the next generation — through machine-specific vid"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0D2B4E; --navy-mid: #1A4070; --blue: #1F4E79;
+      --teal: #00A99D; --teal-light: #00C9BB; --amber: #F5A623;
+      --white: #FFFFFF; --border: rgba(255,255,255,0.12);
+      --card-bg: rgba(255,255,255,0.05); --radius: 14px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--navy); color: #fff; line-height: 1.6; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 5%; display:flex; align-items:center; justify-content:space-between; background:rgba(13,27,46,0.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+    .nav-logo { font-size:1.25rem; font-weight:800; color:#fff; text-decoration:none; }
+    .nav-logo span { color:var(--teal); }
+    .nav-links { display:flex; gap:28px; list-style:none; align-items:center; }
+    .nav-links a { color:rgba(255,255,255,0.75); text-decoration:none; font-size:0.88rem; font-weight:500; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--teal-light); }
+    .nav-cta { background:var(--teal)!important; color:var(--navy)!important; padding:8px 20px; border-radius:8px; font-weight:700!important; }
+    .nav-cta:hover { background:var(--teal-light)!important; }
+
+    /* DROPDOWN */
+    .nav-dropdown { position:relative; }
+    .dropdown-trigger { cursor:pointer; }
+    .dropdown-menu { display:none; position:absolute; top:calc(100% + 14px); left:50%; transform:translateX(-50%); background:rgba(8,16,30,0.97); backdrop-filter:blur(20px); border:1px solid var(--border); border-radius:14px; padding:8px; min-width:280px; z-index:200; display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+    .nav-dropdown:hover .dropdown-menu { display:grid; }
+    .dropdown-menu a { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; color:rgba(255,255,255,0.8)!important; text-decoration:none; transition:background 0.15s; }
+    .dropdown-menu a:hover { background:rgba(255,255,255,0.07); }
+
+    /* HERO */
+    .mod-hero { min-height:72vh; padding:130px 5% 80px; display:flex; align-items:center; position:relative; overflow:hidden; }
+    .mod-hero::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 0%,var(--accent-glow,rgba(0,169,157,0.18)) 0%,transparent 70%); pointer-events:none; }
+    .hero-inner { max-width:900px; margin:0 auto; text-align:center; position:relative; }
+    .mod-tag { display:inline-block; font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:5px 14px; border-radius:100px; border:1px solid var(--accent-color,var(--teal)); color:var(--accent-color,var(--teal)); margin-bottom:20px; }
+    .mod-hero h1 { font-size:clamp(2rem,4.5vw,3.4rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; margin-bottom:22px; }
+    .mod-hero p { font-size:clamp(1rem,1.5vw,1.15rem); color:rgba(255,255,255,0.7); max-width:680px; margin:0 auto 36px; line-height:1.7; }
+    .btn-primary { background:var(--accent-color,var(--teal)); color:#0D2B4E; padding:14px 32px; border-radius:10px; font-weight:700; font-size:1rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all 0.2s; border:none; cursor:pointer; font-family:inherit; }
+    .btn-primary:hover { opacity:0.88; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+    .btn-ghost { background:transparent; color:#fff; padding:14px 32px; border-radius:10px; font-weight:600; font-size:1rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,0.25); transition:all 0.2s; margin-left:12px; }
+    .btn-ghost:hover { border-color:var(--accent-color,var(--teal)); color:var(--accent-color,var(--teal)); }
+
+    /* SECTIONS */
+    section { padding:80px 5%; }
+    .section-inner { max-width:1100px; margin:0 auto; }
+    .section-label { font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent-color,var(--teal)); margin-bottom:10px; }
+    h2 { font-size:clamp(1.7rem,3vw,2.5rem); font-weight:800; letter-spacing:-1px; line-height:1.15; margin-bottom:16px; }
+    h2 em { font-style:normal; color:var(--accent-color,var(--teal)); }
+    .section-sub { font-size:1rem; color:rgba(255,255,255,0.6); max-width:580px; line-height:1.7; margin-bottom:48px; }
+
+    /* PROBLEM */
+    .problem-section { background:#081628; }
+    .pain-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+    .pain-card { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:26px; }
+    .pain-icon { font-size:2rem; margin-bottom:12px; }
+    .pain-card h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+    .pain-card p { font-size:0.875rem; color:rgba(255,255,255,0.6); line-height:1.6; }
+
+    /* FEATURES */
+    .features-section { background:#0a1f38; }
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
+    .feature-card { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:28px; border-top:3px solid var(--accent-color,var(--teal)); transition:transform 0.2s; }
+    .feature-card:hover { transform:translateY(-4px); }
+    .feature-icon { font-size:1.8rem; margin-bottom:12px; }
+    .feature-card h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+    .feature-card p { font-size:0.875rem; color:rgba(255,255,255,0.6); line-height:1.6; }
+
+    /* PORTER'S */
+    .forces-section { background:#081628; }
+    .forces-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    .force-card { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:22px; }
+    .force-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .force-icon { font-size:1.4rem; }
+    .force-name { font-size:0.85rem; font-weight:700; }
+    .force-level { font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:100px; }
+    .level-High { background:rgba(232,75,122,0.2); color:#F57AB3; border:1px solid rgba(232,75,122,0.3); }
+    .level-Medium { background:rgba(245,166,35,0.2); color:#F7C86A; border:1px solid rgba(245,166,35,0.3); }
+    .level-Low { background:rgba(39,174,96,0.2); color:#6FCF97; border:1px solid rgba(39,174,96,0.3); }
+    .force-card p { font-size:0.82rem; color:rgba(255,255,255,0.6); line-height:1.55; }
+
+    /* PESTLE */
+    .pestle-section { background:#0a1f38; }
+    .pestle-list { display:flex; flex-direction:column; gap:14px; }
+    .pestle-row { display:flex; gap:20px; align-items:flex-start; background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:18px 22px; }
+    .pestle-key { font-size:1.1rem; font-weight:900; color:var(--accent-color,var(--teal)); min-width:24px; }
+    .pestle-row p { font-size:0.9rem; color:rgba(255,255,255,0.7); line-height:1.6; }
+
+    /* MODULES NAV */
+    .modules-nav-section { background:#081628; padding:60px 5%; }
+    .modules-nav-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; max-width:1100px; margin:0 auto; }
+    .module-pill { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:14px 18px; text-decoration:none; display:flex; align-items:center; gap:10px; transition:all 0.2s; }
+    .module-pill:hover { border-color:rgba(255,255,255,0.25); transform:translateY(-2px); }
+    .module-pill .pill-icon { font-size:1.2rem; }
+    .module-pill .pill-name { font-size:0.82rem; font-weight:700; color:#fff; display:block; }
+    .module-pill .pill-sub { font-size:0.7rem; color:rgba(255,255,255,0.4); font-family:monospace; }
+    .module-pill.active { border-color:var(--accent-color,var(--teal)); background:rgba(255,255,255,0.08); }
+
+    /* CTA FOOTER */
+    .cta-section { background:var(--navy); text-align:center; padding:80px 5%; }
+    .cta-section h2 { margin-bottom:12px; }
+    .cta-section p { color:rgba(255,255,255,0.6); margin-bottom:32px; }
+
+    /* FOOTER */
+    footer { background:#060f1a; border-top:1px solid var(--border); padding:32px 5%; text-align:center; }
+    .footer-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+    .footer-logo { font-size:1rem; font-weight:800; }
+    .footer-logo span { color:var(--teal); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.82rem; transition:color 0.2s; }
+    .footer-links a:hover { color:var(--teal-light); }
+    .footer-copy { font-size:0.78rem; color:rgba(255,255,255,0.25); }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.55s ease,transform 0.55s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    @media(max-width:768px) {
+      .nav-links { display:none; }
+      .dropdown-menu { grid-template-columns:1fr; }
+      .mod-hero h1 { font-size:1.9rem; }
+    }
+
+    :root { --accent-color: #C39BD3; --accent-glow: #C39BD32e; }
+    .mod-hero { background: radial-gradient(ellipse 80% 50% at 50% -5%, #C39BD322 0%, transparent 65%), linear-gradient(160deg,#0D2B4E 0%,#0a1f38 60%,#081628 100%); }
+    .accent-bar { height:4px; background:linear-gradient(90deg,#9B59B6,#C39BD3); border-radius:0 0 var(--radius) var(--radius); margin-bottom:32px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">equip<span>A</span>.kiwi</a>
+    <ul class="nav-links">
+      <li><a href="/#problem">The Problem</a></li>
+      <li><a href="/#solution">The Platform</a></li>
+      <li class="nav-dropdown">
+        <a href="/#solution" class="dropdown-trigger">Modules ▾</a>
+        <div class="dropdown-menu">
+            <a href="/modules/market.html">
+              <span style="font-size:1.1rem">🏭</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">market.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">market.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/lab.html">
+              <span style="font-size:1.1rem">🧪</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">lab.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">lab.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/care.html">
+              <span style="font-size:1.1rem">🔧</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">care.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">care.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/safe.html">
+              <span style="font-size:1.1rem">🛡️</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">safe.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">safe.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/learn.html">
+              <span style="font-size:1.1rem">🎓</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:var(--accent)">learn.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">learn.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/loop.html">
+              <span style="font-size:1.1rem">♻️</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">loop.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">loop.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/finance.html">
+              <span style="font-size:1.1rem">💰</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">finance.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">finance.equipa.kiwi</span>
+              </span>
+            </a>
+            <a href="/modules/sure.html">
+              <span style="font-size:1.1rem">🛡️</span>
+              <span>
+                <strong style="display:block;font-size:0.85rem;color:white">sure.equipA</strong>
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:monospace">sure.equipa.kiwi</span>
+              </span>
+            </a>
+        </div>
+      </li>
+      <li><a href="/#signup" class="nav-cta">Join the Waitlist</a></li>
+    </ul>
+  </nav>
+
+  <div style="height:72px"></div>
+  <div class="accent-bar"></div>
+
+  <!-- HERO -->
+  <section class="mod-hero">
+    <div class="hero-inner">
+      <div class="mod-tag">Knowledge</div>
+      <h1>Don't Let Decades of Expertise Retire</h1>
+      <p>Capturing the specialist knowledge of New Zealand's retiring industrial operators and transferring it to the next generation — through machine-specific video libraries, guides, and expert networks.</p>
+      <a href="/#signup" class="btn-primary">Preserve Your Knowledge ↗</a>
+      <a href="/#solution" class="btn-ghost">All Modules</a>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem-section">
+    <div class="section-inner">
+      <p class="section-label reveal">The Problem</p>
+      <h2 class="reveal">When your senior operator leaves, their knowledge leaves too</h2>
+      <p class="section-sub reveal">New Zealand is facing a critical knowledge cliff. 25% of the industrial workforce is nearing retirement, taking decades of hands-on expertise with them — irreplaceable knowledge about specific machines, local workarounds, and operational nuance that no manual captures.</p>
+      <div class="pain-grid">
+        <div class="pain-card reveal">
+          <div class="pain-icon">👴</div>
+          <h3>The 25% Knowledge Cliff</h3>
+          <p>A quarter of NZ's industrial workforce will retire in the next decade. The tacit knowledge of how to run a specific machine safely and efficiently will disappear with them.</p>
+        </div>
+        <div class="pain-card reveal">
+          <div class="pain-icon">📼</div>
+          <h3>No Capture Infrastructure</h3>
+          <p>Tribal knowledge lives in people's heads. There is no scalable way to extract it into searchable, reusable formats — until now.</p>
+        </div>
+        <div class="pain-card reveal">
+          <div class="pain-icon">🎓</div>
+          <h3>Generic Training Gaps</h3>
+          <p>YouTube and generic trade courses lack NZ context, specific equipment coverage, and the safety standards required for heavy industrial environments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="features-section">
+    <div class="section-inner">
+      <p class="section-label reveal">The Solution</p>
+      <h2 class="reveal">What <em>learn.equipA</em> delivers</h2>
+      <p class="section-sub reveal">Purpose-built features that directly address the friction points in this layer of New Zealand's industrial ecosystem.</p>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">🎬</div>
+          <h3>Machine-Specific Libraries</h3>
+          <p>Video guides, operational manuals, and diagnostic walkthroughs tied to specific equipment makes and models — not generic theory.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">👨‍🏫</div>
+          <h3>Expert Operator Network</h3>
+          <p>Retiring specialists can share knowledge, earn supplementary income, and build a legacy — while apprentices get direct access to irreplaceable expertise.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🏆</div>
+          <h3>NZ-Contextualised</h3>
+          <p>All content is validated against NZ safety standards, WorkSafe guidelines, and local operational conditions — not US or European equivalents.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">📈</div>
+          <h3>Linked to care.equipA</h3>
+          <p>Training records and operator certifications feed directly into maintenance logs and compliance files, building a full picture of asset capability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTER'S 5 FORCES -->
+  <section class="forces-section">
+    <div class="section-inner">
+      <p class="section-label reveal">Porter's 5 Forces</p>
+      <h2 class="reveal">The <em>competitive landscape</em> in NZ</h2>
+      <p class="section-sub reveal">A structural analysis of the market forces shaping this layer of the equipA.kiwi ecosystem.</p>
+      <div class="forces-grid">
+        <div class="force-card reveal">
+          <div class="force-header">
+            <span class="force-icon">🏆</span>
+            <div>
+              <div class="force-name">Rivalry</div>
+              <span class="force-level level-Low">Low</span>
+            </div>
+          </div>
+          <p>Very few niche industrial knowledge-transfer platforms exist in NZ. Generic platforms like YouTube lack safety validation and equipment specificity.</p>
+        </div>
+        <div class="force-card reveal">
+          <div class="force-header">
+            <span class="force-icon">👴</span>
+            <div>
+              <div class="force-name">Supplier Power</div>
+              <span class="force-level level-High">High</span>
+            </div>
+          </div>
+          <p>Retiring operators hold the knowledge. Incentivising them to share it — through recognition, revenue, or legacy — is the critical supply-side challenge.</p>
+        </div>
+        <div class="force-card reveal">
+          <div class="force-header">
+            <span class="force-icon">💼</span>
+            <div>
+              <div class="force-name">Buyer Power</div>
+              <span class="force-level level-Medium">Medium</span>
+            </div>
+          </div>
+          <p>Apprentices and business owners need the training but have limited budgets. Pricing and accessibility are key adoption drivers.</p>
+        </div>
+        <div class="force-card reveal">
+          <div class="force-header">
+            <span class="force-icon">🔄</span>
+            <div>
+              <div class="force-name">Substitution</div>
+              <span class="force-level level-High">High</span>
+            </div>
+          </div>
+          <p>Generic YouTube tutorials are free and accessible, but dangerously lack NZ safety context and equipment-specific detail.</p>
+        </div>
+        <div class="force-card reveal">
+          <div class="force-header">
+            <span class="force-icon">🚪</span>
+            <div>
+              <div class="force-name">New Entrants</div>
+              <span class="force-level level-Medium">Medium</span>
+            </div>
+          </div>
+          <p>Capturing tacit, legacy knowledge at scale requires trusted relationships with retiring operators — a network that takes years to build.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PESTLE -->
+  <section class="pestle-section">
+    <div class="section-inner">
+      <p class="section-label reveal">PESTLE Analysis</p>
+      <h2 class="reveal">Key <em>macro factors</em> driving this layer</h2>
+      <p class="section-sub reveal">The political, economic, social, technological, legal, and environmental forces that make this module strategically critical right now.</p>
+      <div class="pestle-list">
+        <div class="pestle-row reveal">
+          <div class="pestle-key">S</div>
+          <p>NZ's aging industrial demographic creates urgent, time-bound demand — every year of delay means more irreplaceable knowledge is permanently lost.</p>
+        </div>
+        <div class="pestle-row reveal">
+          <div class="pestle-key">E</div>
+          <p>Retraining an apprentice from scratch costs far more than transferring existing expertise. learn.equipA is a productivity investment, not just a training cost.</p>
+        </div>
+        <div class="pestle-row reveal">
+          <div class="pestle-key">T</div>
+          <p>Short-form video, AI transcription, and searchable knowledge bases make capturing and distributing expert knowledge cheaper and more accessible than ever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL MODULES -->
+  <section class="modules-nav-section">
+    <div style="max-width:1100px;margin:0 auto;">
+      <p class="section-label" style="margin-bottom:18px">Explore All 8 Modules</p>
+      <div class="modules-nav-grid">
+        <a href="/modules/market.html" class="module-pill">
+          <span class="pill-icon">🏭</span>
+          <span>
+            <span class="pill-name">market.equipA</span>
+            <span class="pill-sub">Marketplace</span>
+          </span>
+        </a>
+        <a href="/modules/lab.html" class="module-pill">
+          <span class="pill-icon">🧪</span>
+          <span>
+            <span class="pill-name">lab.equipA</span>
+            <span class="pill-sub">Shared Access</span>
+          </span>
+        </a>
+        <a href="/modules/care.html" class="module-pill">
+          <span class="pill-icon">🔧</span>
+          <span>
+            <span class="pill-name">care.equipA</span>
+            <span class="pill-sub">Maintenance</span>
+          </span>
+        </a>
+        <a href="/modules/safe.html" class="module-pill">
+          <span class="pill-icon">🛡️</span>
+          <span>
+            <span class="pill-name">safe.equipA</span>
+            <span class="pill-sub">Compliance</span>
+          </span>
+        </a>
+        <a href="/modules/learn.html" class="module-pill  active">
+          <span class="pill-icon">🎓</span>
+          <span>
+            <span class="pill-name">learn.equipA</span>
+            <span class="pill-sub">Knowledge</span>
+          </span>
+        </a>
+        <a href="/modules/loop.html" class="module-pill">
+          <span class="pill-icon">♻️</span>
+          <span>
+            <span class="pill-name">loop.equipA</span>
+            <span class="pill-sub">Circularity</span>
+          </span>
+        </a>
+        <a href="/modules/finance.html" class="module-pill">
+          <span class="pill-icon">💰</span>
+          <span>
+            <span class="pill-name">finance.equipA</span>
+            <span class="pill-sub">Finance</span>
+          </span>
+        </a>
+        <a href="/modules/sure.html" class="module-pill">
+          <span class="pill-icon">🛡️</span>
+          <span>
+            <span class="pill-name">sure.equipA</span>
+            <span class="pill-sub">Insurance</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <h2>Ready to join the <em>equipA.kiwi</em> ecosystem?</h2>
+      <p>Be first to access the platform and help shape what gets built next.</p>
+      <a href="/#signup" class="btn-primary">Kia ora — Join the Waitlist ↗</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">equip<span>A</span>.kiwi</div>
+      <ul class="footer-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#problem">The Problem</a></li>
+        <li><a href="/#solution">Platform</a></li>
+        <li><a href="/#signup">Join</a></li>
+        <li><a href="https://github.com/Radkiwi/EquipA" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 equipA.kiwi — Built in Aotearoa 🌿</div>
+    </div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(e => e.forEach(x => {
+      if (x.isIntersecting) x.target.classList.add('visible');
+    }), {threshold:0.1});
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

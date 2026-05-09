@@ -68,6 +68,49 @@
     }
     .nav-cta:hover { background: var(--teal-light) !important; color: var(--navy) !important; }
 
+    /* ── NAV DROPDOWN ── */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a::after {
+      content: ' ▾';
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute; top: calc(100% + 12px); left: 50%;
+      transform: translateX(-50%);
+      background: rgba(13,27,46,0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      width: 380px;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      box-shadow: var(--shadow);
+      z-index: 200;
+    }
+    .nav-dropdown:hover .dropdown-menu { display: grid; }
+    .dropdown-menu a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem !important;
+      color: rgba(255,255,255,0.8) !important;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dropdown-menu a:hover {
+      background: rgba(0,169,157,0.15);
+      color: var(--teal-light) !important;
+    }
+    .dropdown-menu a .dm-icon {
+      font-size: 1rem;
+      width: 22px; text-align: center;
+    }
+    .dropdown-menu a .dm-label { font-weight: 600; }
+
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
@@ -335,6 +378,19 @@
     <ul class="nav-links">
       <li><a href="#problem">The Problem</a></li>
       <li><a href="#solution">The Platform</a></li>
+      <li class="nav-dropdown">
+        <a href="#solution">Modules</a>
+        <div class="dropdown-menu">
+          <a href="/modules/market.html"><span class="dm-icon">📊</span><span class="dm-label">market.equipA</span></a>
+          <a href="/modules/lab.html"><span class="dm-icon">🔬</span><span class="dm-label">lab.equipA</span></a>
+          <a href="/modules/care.html"><span class="dm-icon">🔧</span><span class="dm-label">care.equipA</span></a>
+          <a href="/modules/safe.html"><span class="dm-icon">🛡️</span><span class="dm-label">safe.equipA</span></a>
+          <a href="/modules/learn.html"><span class="dm-icon">🎓</span><span class="dm-label">learn.equipA</span></a>
+          <a href="/modules/loop.html"><span class="dm-icon">♻️</span><span class="dm-label">loop.equipA</span></a>
+          <a href="/modules/finance.html"><span class="dm-icon">💰</span><span class="dm-label">finance.equipA</span></a>
+          <a href="/modules/sure.html"><span class="dm-icon">🔒</span><span class="dm-label">sure.equipA</span></a>
+        </div>
+      </li>
       <li><a href="#ecosystem">Ecosystem</a></li>
       <li><a href="#signup" class="nav-cta">Join the Waitlist</a></li>
     </ul>
