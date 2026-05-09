@@ -78,6 +78,44 @@ app.post("/api/signup", signupLimiter, async (req, res) => {
   }
 });
 
+async function saveGrowthLead(business, targets, proc, bottlenecks) {
+  if (!base) return null;
+  try {
+    const records = await base("Growth Leads").create([{
+      fields: {
+        "Business Name": business.name || "",
+        "Industry":      business.industry || "",
+        "Revenue":       business.revenue || "",
+        "Team Size":     business.teamSize || "",
+        "Products Services": business.products || "",
+        "Target 1yr":    targets.oneYear || "",
+        "Target 5yr":    targets.fiveYear || "",
+        "Target 10yr":   targets.tenYear || "",
+        "Production Goals": targets.productionGoals || "",
+        "Process":       proc.description || "",
+        "Equipment":     proc.workflow || "",
+        "Bottlenecks":   bottlenecks.selected?.join("; ") || "",
+        "Bottleneck Details": bottlenecks.freeText || "",
+        "Report Date":   new Date().toISOString().split("T")[0],
+        "Source":        "Growth Report",
+      },
+    }]);
+    return records[0].id;
+  } catch (err) {
+    console.error("Airtable lead save error:", err.message);
+    return null;
+  }
+}
+
+async function updateLeadEmail(leadId, email) {
+  if (!base || !leadId) return;
+  try {
+    await base("Growth Leads").update(leadId, { Email: email });
+  } catch (err) {
+    console.error("Airtable email update error:", err.message);
+  }
+}
+
 app.post("/api/growth-report", growthLimiter, async (req, res) => {
   const { business, targets, process: proc, bottlenecks } = req.body;
 
@@ -152,7 +190,8 @@ Address the owner directly as "you". Reference NZ context (WorkSafe, NZTE, Calla
       max_tokens: 3500,
       messages: [{ role: "user", content: prompt }],
     });
-    res.json({ success: true, report: message.content[0].text });
+    const leadId = await saveGrowthLead(business, targets, proc, bottlenecks);
+    res.json({ success: true, report: message.content[0].text, leadId });
   } catch (err) {
     console.error("Anthropic API error:", err.message);
     res.status(500).json({ success: false, error: "Failed to generate report. Please try again." });
@@ -160,7 +199,7 @@ Address the owner directly as "you". Reference NZ context (WorkSafe, NZTE, Calla
 });
 
 app.post("/api/send-report", async (req, res) => {
-  const { email, reportHtml, businessName } = req.body;
+  const { email, reportHtml, businessName, leadId } = req.body;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ success: false, error: "A valid email address is required." });
@@ -206,6 +245,7 @@ app.post("/api/send-report", async (req, res) => {
       subject: `Your equipA Growth Report${businessName ? " — " + businessName : ""}`,
       html: emailHtml,
     });
+    await updateLeadEmail(leadId, email);
     res.json({ success: true });
   } catch (err) {
     console.error("Resend error:", err.message);

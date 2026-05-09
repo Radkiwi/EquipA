@@ -465,6 +465,7 @@
     let selectedBottlenecks = [];
     let reportHtml = '';
     let businessName = '';
+    let leadId = null;
 
     function goTo(next) {
       // validate before advancing
@@ -559,6 +560,7 @@
 
         if (data.success) {
           reportHtml = data.report;
+          leadId = data.leadId || null;
           document.getElementById('report-body').innerHTML = reportHtml;
           document.getElementById('report-meta').textContent =
             (businessName || 'Your business') + ' · Generated ' +
@@ -648,7 +650,7 @@ ${reportHtml}
         const res = await fetch('/api/send-report', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, reportHtml, businessName }),
+          body: JSON.stringify({ email, reportHtml, businessName, leadId }),
         });
         const data = await res.json();
         if (data.success) {
