@@ -84,6 +84,7 @@ async function saveGrowthLead(business, targets, proc, bottlenecks) {
     const records = await base("Growth Leads").create([{
       fields: {
         "Business Name": business.name || "",
+        "Email":         business.email || "",
         "Industry":      business.industry || "",
         "Revenue":       business.revenue || "",
         "Team Size":     business.teamSize || "",

@@ -400,11 +400,17 @@
         <textarea class="form-textarea" id="f-bn-text" placeholder="e.g. Our cold storage capacity is maxed out — we're turning down contracts because we can't hold enough stock. We'd need at least 200m² of additional refrigerated space to take on the major supermarket account we've been offered…"></textarea>
       </div>
 
+      <div class="field-group" style="margin-top:28px;padding-top:24px;border-top:1px solid var(--border);">
+        <label>Where should we send your report? <span class="req">*</span></label>
+        <input type="email" class="form-input" id="f-email" placeholder="your@email.com" />
+        <p class="field-hint">We'll email your full growth report to this address. No spam — ever.</p>
+      </div>
+
       <div class="step-nav">
         <button class="btn-back" onclick="goTo(3)">← Back</button>
         <button class="btn-generate" onclick="generateReport()">Generate My Growth Report ↗</button>
       </div>
-      <div class="error-msg" id="err-4">Please select at least one bottleneck or describe your main constraint below.</div>
+      <div class="error-msg" id="err-4">Please select at least one bottleneck or describe your main constraint, and enter your email address.</div>
     </div>
 
   </div><!-- /wizard-wrap -->
@@ -514,16 +520,21 @@
 
     async function generateReport() {
       const freeText = document.getElementById('f-bn-text').value.trim();
-      if (selectedBottlenecks.length === 0 && !freeText) {
+      const emailVal = v('f-email');
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+      if ((selectedBottlenecks.length === 0 && !freeText) || !emailValid) {
         show('err-4'); return;
       }
       hide('err-4');
 
       businessName = v('f-name');
+      // pre-fill the post-report email card
+      document.getElementById('report-email').value = emailVal;
 
       const payload = {
         business: {
           name: businessName,
+          email: emailVal,
           industry: v('f-industry'),
           revenue: v('f-revenue'),
           teamSize: v('f-team'),
