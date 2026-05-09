@@ -139,6 +139,21 @@
     .btn-download:hover { background: var(--teal-light); }
     .report-body { background: var(--white); color: #1a1a1a; border-radius: var(--radius); padding: 44px; line-height: 1.72; font-size: 0.95rem; font-family: Arial, sans-serif; }
 
+    /* EMAIL CAPTURE */
+    .email-capture { margin-top: 20px; background: linear-gradient(135deg, rgba(0,169,157,0.12) 0%, rgba(0,169,157,0.06) 100%); border: 1px solid rgba(0,169,157,0.3); border-radius: var(--radius); padding: 28px 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .email-capture-icon { font-size: 2rem; flex-shrink: 0; }
+    .email-capture-content { flex: 1; min-width: 200px; }
+    .email-capture-content h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .email-capture-content p { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
+    .email-form { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .email-form .form-input { flex: 1; min-width: 200px; }
+    .btn-send-email { background: var(--teal); color: var(--navy); padding: 11px 22px; border-radius: 10px; font-family: inherit; font-size: 0.875rem; font-weight: 700; cursor: pointer; border: none; white-space: nowrap; transition: background 0.2s; flex-shrink: 0; }
+    .btn-send-email:hover { background: var(--teal-light); }
+    .btn-send-email:disabled { opacity: 0.6; cursor: not-allowed; }
+    .email-status { margin-top: 10px; font-size: 0.85rem; display: none; }
+    .email-status.success { display: block; color: var(--teal); }
+    .email-status.error { display: block; color: #ff9999; }
+
     /* FOOTER */
     footer { background: #081628; padding: 28px 5%; border-top: 1px solid var(--border); }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
@@ -421,6 +436,21 @@
       </div>
     </div>
     <div class="report-body" id="report-body"></div>
+
+    <!-- EMAIL CAPTURE -->
+    <div class="email-capture">
+      <div class="email-capture-icon">📬</div>
+      <div class="email-capture-content">
+        <h3>Get this report in your inbox</h3>
+        <p>We'll send your full growth report directly to your email — no account needed.</p>
+        <div class="email-form">
+          <input type="email" class="form-input" id="report-email" placeholder="your@email.com" />
+          <button class="btn-send-email" id="btn-send-email" onclick="sendReportEmail()">Send to my inbox →</button>
+        </div>
+        <div class="email-status" id="email-status"></div>
+      </div>
+    </div>
+
   </div>
 
   <footer>
@@ -597,6 +627,46 @@ ${reportHtml}
       a.download = 'equipA-growth-report-' + Date.now() + '.html';
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    async function sendReportEmail() {
+      const email = document.getElementById('report-email').value.trim();
+      const status = document.getElementById('email-status');
+      const btn = document.getElementById('btn-send-email');
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = 'Please enter a valid email address.';
+        status.className = 'email-status error';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      status.className = 'email-status';
+
+      try {
+        const res = await fetch('/api/send-report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, reportHtml, businessName }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          status.textContent = '✓ Report sent! Check your inbox.';
+          status.className = 'email-status success';
+          btn.textContent = 'Sent ✓';
+        } else {
+          status.textContent = data.error || 'Failed to send. Please download instead.';
+          status.className = 'email-status error';
+          btn.disabled = false;
+          btn.textContent = 'Send to my inbox →';
+        }
+      } catch (e) {
+        status.textContent = 'Connection error. Please download the report instead.';
+        status.className = 'email-status error';
+        btn.disabled = false;
+        btn.textContent = 'Send to my inbox →';
+      }
     }
 
     function v(id) { return (document.getElementById(id)?.value || '').trim(); }
