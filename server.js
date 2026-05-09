@@ -127,8 +127,8 @@ app.get("/api/cms/hero/:module", async (req, res) => {
   if (!base) return res.json({ url: null });
 
   try {
-    const records = await base("Visual Asset Generation").select({
-      filterByFormula: `AND({Publish to Website}, FIND("${titlePrefix}", {Image Title}))`,
+    const records = await base("tblkeVxCi6PAsWipB").select({
+      filterByFormula: `AND({Image approved}="Yes", FIND("${titlePrefix}", {Image Title}))`,
       maxRecords: 1,
       fields: ["Image Title", "Image (Generated)"],
     }).firstPage();
