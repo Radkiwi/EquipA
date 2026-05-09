@@ -33,24 +33,32 @@ app.post("/api/signup", signupLimiter, async (req, res) => {
     return res.json({ success: true, message: "Kia ora! You're on the list." });
   }
 
+  const baseFields = {
+    Name: name || "",
+    Email: email,
+    Organisation: organisation || "",
+    Signup_Date: new Date().toISOString().split("T")[0],
+    Source: "Landing Page",
+    "Signup Status": "Signed Up",
+  };
+
   try {
-    await base("Waitlist").create([
-      {
-        fields: {
-          Name: name || "",
-          Email: email,
-          Organisation: organisation || "",
-          Role: role || "",
-          Signup_Date: new Date().toISOString().split("T")[0],
-          Source: "Landing Page",
-          "Signup Status": "Signed Up",
-        },
-      },
-    ]);
+    await base("Waitlist").create([{ fields: { ...baseFields, Role: role || "" } }]);
     res.json({ success: true, message: "Kia ora! You're on the list." });
   } catch (err) {
-    console.error("Airtable error:", err.message);
-    res.status(500).json({ success: false, error: "Something went wrong. Please try again." });
+    if (err.message && err.message.includes("INVALID_MULTIPLE_CHOICE_OPTIONS")) {
+      // Role field is a singleSelect in Airtable — fall back to saving without it
+      try {
+        await base("Waitlist").create([{ fields: { ...baseFields, "Interest Notes": role || "" } }]);
+        res.json({ success: true, message: "Kia ora! You're on the list." });
+      } catch (fallbackErr) {
+        console.error("Airtable fallback error:", fallbackErr.message);
+        res.status(500).json({ success: false, error: "Something went wrong. Please try again." });
+      }
+    } else {
+      console.error("Airtable error:", err.message);
+      res.status(500).json({ success: false, error: "Something went wrong. Please try again." });
+    }
   }
 });
 
