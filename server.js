@@ -43,6 +43,7 @@ app.post("/api/signup", signupLimiter, async (req, res) => {
           Role: role || "",
           Signup_Date: new Date().toISOString().split("T")[0],
           Source: "Landing Page",
+          "Signup Status": "Signed Up",
         },
       },
     ]);
