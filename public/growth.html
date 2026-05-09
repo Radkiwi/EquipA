@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Growth Report — equipA.kiwi</title>
+  <meta name="description" content="Get a personalised business growth report showing exactly how equipA can help you reach your production and revenue targets." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0D2B4E; --navy-mid: #1A4070; --blue: #1F4E79;
+      --teal: #00A99D; --teal-light: #00C9BB;
+      --white: #FFFFFF;
+      --border: rgba(255,255,255,0.12); --card-bg: rgba(255,255,255,0.05);
+      --radius: 14px; --shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--navy); color: var(--white); line-height: 1.6; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 5%; display: flex; align-items: center; justify-content: space-between; background: rgba(13,27,46,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--teal-light); }
+    .nav-cta { background: var(--teal); color: var(--navy) !important; padding: 8px 20px; border-radius: 8px; font-weight: 700 !important; }
+    .nav-cta:hover { background: var(--teal-light) !important; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a::after { content: ' ▾'; font-size: 0.7rem; opacity: 0.6; }
+    .dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px; width: 380px; z-index: 200; }
+    .nav-dropdown:hover .dropdown-menu { display: block; }
+    .dropdown-inner { background: rgba(13,27,46,0.98); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; box-shadow: var(--shadow); }
+    .dropdown-menu a { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-size: 0.82rem !important; color: rgba(255,255,255,0.8) !important; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+    .dropdown-menu a:hover { background: rgba(0,169,157,0.15); color: var(--teal-light) !important; }
+    .dm-icon { font-size: 1rem; width: 22px; text-align: center; }
+    .dm-label { font-weight: 600; }
+
+    /* HERO */
+    .page-hero { padding: 120px 5% 56px; text-align: center; background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,169,157,0.15) 0%, transparent 70%), linear-gradient(160deg, #0D2B4E 0%, #0a1f38 100%); }
+    .section-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+    .page-hero h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 900; line-height: 1.12; margin-bottom: 18px; }
+    .page-hero h1 em { color: var(--teal); font-style: normal; }
+    .page-hero p { color: rgba(255,255,255,0.6); font-size: 1.05rem; max-width: 540px; margin: 0 auto; }
+
+    /* WIZARD WRAPPER */
+    .wizard-wrap { max-width: 740px; margin: 0 auto; padding: 52px 5% 80px; }
+
+    /* PROGRESS */
+    .progress-bar { display: flex; align-items: flex-start; gap: 0; margin-bottom: 44px; }
+    .prog-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+    .prog-step:not(:last-child) { position: relative; }
+    .prog-step:not(:last-child)::after { content: ''; position: absolute; top: 15px; left: calc(50% + 16px); right: calc(-50% + 16px); height: 1px; background: var(--border); }
+    .step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: rgba(255,255,255,0.35); transition: all 0.3s; flex-shrink: 0; }
+    .step-dot.active { background: var(--teal); border-color: var(--teal); color: var(--navy); }
+    .step-dot.done { background: rgba(0,169,157,0.15); border-color: var(--teal); color: var(--teal); }
+    .prog-step span { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.35); text-align: center; letter-spacing: 0.5px; text-transform: uppercase; }
+    .prog-step.active span { color: var(--teal); }
+
+    /* STEP PANELS */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+    .step-panel > h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 6px; }
+    .step-panel > .step-desc { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 30px; }
+
+    /* FORM */
+    .field-group { margin-bottom: 20px; }
+    .field-group label { display: block; font-size: 0.84rem; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 7px; }
+    .req { color: var(--teal); margin-left: 2px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 11px 15px;
+      border-radius: 10px; background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border); color: var(--white);
+      font-family: inherit; font-size: 0.92rem; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--teal); background: rgba(255,255,255,0.09); }
+    .form-select option { background: #0D2B4E; color: var(--white); }
+    .form-textarea { resize: vertical; min-height: 96px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field-hint { font-size: 0.76rem; color: rgba(255,255,255,0.3); margin-top: 5px; }
+
+    /* TARGETS */
+    .targets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .target-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .target-label { font-size: 0.72rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+    /* BOTTLENECKS */
+    .bottleneck-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 22px; }
+    .bottleneck-option { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+    .bottleneck-option:hover { border-color: rgba(255,255,255,0.22); }
+    .bottleneck-option.selected { border-color: var(--teal); background: rgba(0,169,157,0.1); }
+    .b-check { width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: transparent; transition: all 0.2s; }
+    .bottleneck-option.selected .b-check { background: var(--teal); border-color: var(--teal); color: var(--navy); }
+    .b-text { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.75); line-height: 1.4; }
+
+    /* NAV BUTTONS */
+    .step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+    .btn-back { background: transparent; border: 1px solid var(--border); color: rgba(255,255,255,0.55); padding: 11px 22px; border-radius: 10px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-back:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+    .btn-next { background: var(--teal); color: var(--navy); padding: 11px 26px; border-radius: 10px; font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-next:hover { background: var(--teal-light); }
+    .btn-generate { background: linear-gradient(90deg, var(--teal), var(--teal-light)); color: var(--navy); padding: 13px 30px; border-radius: 10px; font-family: inherit; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,169,157,0.3); }
+
+    /* ERROR */
+    .error-msg { background: rgba(220,50,50,0.12); border: 1px solid rgba(220,50,50,0.25); border-radius: 8px; padding: 12px 16px; color: #ff9999; font-size: 0.85rem; margin-top: 14px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* LOADING */
+    .loading-wrap { display: none; max-width: 480px; margin: 60px auto; text-align: center; padding: 0 5%; }
+    .loading-wrap.show { display: block; }
+    .spinner { width: 48px; height: 48px; border: 3px solid rgba(0,169,157,0.2); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 24px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-wrap h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .loading-wrap > p { color: rgba(255,255,255,0.5); font-size: 0.88rem; }
+    .loading-steps { list-style: none; margin-top: 28px; text-align: left; display: inline-block; }
+    .loading-steps li { padding: 7px 0; font-size: 0.84rem; color: rgba(255,255,255,0.35); display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+    .loading-steps li::before { content: '○'; font-size: 0.7rem; flex-shrink: 0; width: 14px; text-align: center; }
+    .loading-steps li.ls-done { color: var(--teal); }
+    .loading-steps li.ls-done::before { content: '✓'; }
+    .loading-steps li.ls-active { color: var(--white); }
+    .loading-steps li.ls-active::before { content: '●'; color: var(--teal); animation: pulse 1s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+    /* REPORT */
+    .report-wrap { display: none; max-width: 740px; margin: 0 auto; padding: 0 5% 80px; }
+    .report-wrap.show { display: block; }
+    .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+    .report-header h2 { font-size: 1.35rem; font-weight: 800; }
+    .report-meta { color: rgba(255,255,255,0.45); font-size: 0.82rem; margin-top: 4px; }
+    .report-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .btn-restart { background: transparent; border: 1px solid var(--border); color: rgba(255,255,255,0.55); padding: 10px 20px; border-radius: 10px; font-family: inherit; font-size: 0.84rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-restart:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+    .btn-download { background: var(--teal); color: var(--navy); padding: 10px 22px; border-radius: 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-download:hover { background: var(--teal-light); }
+    .report-body { background: var(--white); color: #1a1a1a; border-radius: var(--radius); padding: 44px; line-height: 1.72; font-size: 0.95rem; font-family: Arial, sans-serif; }
+
+    /* FOOTER */
+    footer { background: #081628; padding: 28px 5%; border-top: 1px solid var(--border); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-logo { font-size: 1.1rem; font-weight: 800; }
+    .footer-logo span { color: var(--teal); }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .targets-grid { grid-template-columns: 1fr; }
+      .bottleneck-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .report-body { padding: 24px; }
+      .report-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">equip<span>A</span>.kiwi</a>
+    <ul class="nav-links">
+      <li><a href="/#problem">The Problem</a></li>
+      <li><a href="/#solution">The Platform</a></li>
+      <li class="nav-dropdown">
+        <a href="/#solution">Modules</a>
+        <div class="dropdown-menu">
+          <div class="dropdown-inner">
+            <a href="/modules/market.html"><span class="dm-icon">📊</span><span class="dm-label">Market</span></a>
+            <a href="/modules/lab.html"><span class="dm-icon">🔬</span><span class="dm-label">Lab</span></a>
+            <a href="/modules/care.html"><span class="dm-icon">🔧</span><span class="dm-label">Care</span></a>
+            <a href="/modules/safe.html"><span class="dm-icon">🛡️</span><span class="dm-label">Safe</span></a>
+            <a href="/modules/learn.html"><span class="dm-icon">🎓</span><span class="dm-label">Learn</span></a>
+            <a href="/modules/loop.html"><span class="dm-icon">♻️</span><span class="dm-label">Loop</span></a>
+            <a href="/modules/finance.html"><span class="dm-icon">💰</span><span class="dm-label">Finance</span></a>
+            <a href="/modules/sure.html"><span class="dm-icon">🔒</span><span class="dm-label">Sure</span></a>
+          </div>
+        </div>
+      </li>
+      <li><a href="/#signup" class="nav-cta">Join the Waitlist</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <p class="section-label">Free · AI-Powered</p>
+    <h1>Your <em>personalised</em><br/>equipA growth report</h1>
+    <p>Tell us about your business, your targets, and what's holding you back. We'll generate a tailored roadmap showing exactly which equipA modules can help you get there.</p>
+  </section>
+
+  <!-- WIZARD -->
+  <div class="wizard-wrap" id="wizard">
+
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="prog-step active" id="prog-1">
+        <div class="step-dot active" id="dot-1">1</div>
+        <span>Business</span>
+      </div>
+      <div class="prog-step" id="prog-2">
+        <div class="step-dot" id="dot-2">2</div>
+        <span>Targets</span>
+      </div>
+      <div class="prog-step" id="prog-3">
+        <div class="step-dot" id="dot-3">3</div>
+        <span>Process</span>
+      </div>
+      <div class="prog-step" id="prog-4">
+        <div class="step-dot" id="dot-4">4</div>
+        <span>Bottlenecks</span>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-panel active" id="step-1">
+      <h2>Tell us about your business</h2>
+      <p class="step-desc">We'll use this to personalise your report to your industry and NZ context.</p>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label>Business name <span class="req">*</span></label>
+          <input type="text" class="form-input" id="f-name" placeholder="e.g. Southland Dairy Ltd" />
+        </div>
+        <div class="field-group">
+          <label>Industry <span class="req">*</span></label>
+          <select class="form-select" id="f-industry">
+            <option value="">Select your industry</option>
+            <option>Agriculture & Horticulture</option>
+            <option>Food & Beverage Processing</option>
+            <option>Manufacturing & Engineering</option>
+            <option>Construction & Infrastructure</option>
+            <option>Mining & Resources</option>
+            <option>Marine & Aquaculture</option>
+            <option>Forestry & Timber</option>
+            <option>Research & Science</option>
+            <option>Trades & Services</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label>Current annual revenue</label>
+          <select class="form-select" id="f-revenue">
+            <option value="">Select range</option>
+            <option>Pre-revenue / Startup</option>
+            <option>Under $500k</option>
+            <option>$500k – $2m</option>
+            <option>$2m – $10m</option>
+            <option>$10m – $50m</option>
+            <option>$50m+</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Team size</label>
+          <select class="form-select" id="f-team">
+            <option value="">Select size</option>
+            <option>Solo operator</option>
+            <option>2–10 people</option>
+            <option>11–50 people</option>
+            <option>51–200 people</option>
+            <option>200+ people</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>What do you produce, manufacture, or deliver? <span class="req">*</span></label>
+        <textarea class="form-textarea" id="f-products" placeholder="e.g. We process and package fresh vegetables for supermarket distribution across NZ…"></textarea>
+      </div>
+
+      <div class="step-nav">
+        <div></div>
+        <button class="btn-next" onclick="goTo(2)">Next: Growth Targets →</button>
+      </div>
+      <div class="error-msg" id="err-1">Please fill in your business name, industry, and a description of what you produce.</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-panel" id="step-2">
+      <h2>What are your growth targets?</h2>
+      <p class="step-desc">Revenue, output volume, headcount, new markets — be as specific as you can.</p>
+
+      <div class="targets-grid">
+        <div class="target-card">
+          <div class="target-label">1-Year Target</div>
+          <input type="text" class="form-input" id="f-1yr" placeholder="e.g. $3m revenue" />
+        </div>
+        <div class="target-card">
+          <div class="target-label">5-Year Target</div>
+          <input type="text" class="form-input" id="f-5yr" placeholder="e.g. $12m, 3 sites" />
+        </div>
+        <div class="target-card">
+          <div class="target-label">10-Year Target</div>
+          <input type="text" class="form-input" id="f-10yr" placeholder="e.g. $40m, export" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Key production or operational goals</label>
+        <textarea class="form-textarea" id="f-prod-goals" placeholder="e.g. Double processing capacity, reduce waste by 30%, achieve FSSC 22000 certification, expand into South Island…"></textarea>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goTo(1)">← Back</button>
+        <button class="btn-next" onclick="goTo(3)">Next: Your Process →</button>
+      </div>
+      <div class="error-msg" id="err-2">Please enter at least your 1-year target.</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-panel" id="step-3">
+      <h2>Walk us through your process</h2>
+      <p class="step-desc">Help us understand how your business operates — from inputs to final output.</p>
+
+      <div class="field-group">
+        <label>Describe your production or service delivery process <span class="req">*</span></label>
+        <textarea class="form-textarea" id="f-process" style="min-height:120px" placeholder="e.g. We receive raw milk from ~40 local farms, process and pasteurise on-site, then package into retail and wholesale formats for North Island distribution…"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label>What equipment or infrastructure does your process depend on?</label>
+        <textarea class="form-textarea" id="f-workflow" placeholder="e.g. Two ageing pasteurisers (1990s vintage), a modern bottling line, refrigerated storage for 80,000L, and two refrigerated delivery trucks…"></textarea>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goTo(2)">← Back</button>
+        <button class="btn-next" onclick="goTo(4)">Next: Bottlenecks →</button>
+      </div>
+      <div class="error-msg" id="err-3">Please describe your process so we can build a relevant report.</div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-panel" id="step-4">
+      <h2>What's holding you back?</h2>
+      <p class="step-desc">Select everything that applies — this shapes your equipA roadmap.</p>
+
+      <div class="bottleneck-grid">
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Equipment gaps — machinery I need but don't have">
+          <div class="b-check">✓</div>
+          <span class="b-text">Equipment gaps — machinery I need but don't have</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Aging or unreliable equipment causing downtime">
+          <div class="b-check">✓</div>
+          <span class="b-text">Aging or unreliable equipment causing downtime</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Equipment I own but underutilise">
+          <div class="b-check">✓</div>
+          <span class="b-text">Equipment I own but underutilise</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Skilled labour shortage">
+          <div class="b-check">✓</div>
+          <span class="b-text">Skilled labour shortage</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Compliance and safety requirements">
+          <div class="b-check">✓</div>
+          <span class="b-text">Compliance and safety requirements</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Capital constraints — can't afford the equipment I need">
+          <div class="b-check">✓</div>
+          <span class="b-text">Capital constraints — can't afford the equipment I need</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Knowledge transfer — retiring staff or training gaps">
+          <div class="b-check">✓</div>
+          <span class="b-text">Knowledge transfer — retiring staff or training gaps</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="High maintenance costs and unplanned downtime">
+          <div class="b-check">✓</div>
+          <span class="b-text">High maintenance costs and unplanned downtime</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="Insurance and risk gaps for equipment or operations">
+          <div class="b-check">✓</div>
+          <span class="b-text">Insurance and risk gaps for equipment or operations</span>
+        </div>
+        <div class="bottleneck-option" onclick="toggleB(this)" data-value="R&D access — need specialist testing or lab equipment">
+          <div class="b-check">✓</div>
+          <span class="b-text">R&amp;D access — need specialist testing or lab equipment</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Tell us more about your biggest constraint</label>
+        <textarea class="form-textarea" id="f-bn-text" placeholder="e.g. Our cold storage capacity is maxed out — we're turning down contracts because we can't hold enough stock. We'd need at least 200m² of additional refrigerated space to take on the major supermarket account we've been offered…"></textarea>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goTo(3)">← Back</button>
+        <button class="btn-generate" onclick="generateReport()">Generate My Growth Report ↗</button>
+      </div>
+      <div class="error-msg" id="err-4">Please select at least one bottleneck or describe your main constraint below.</div>
+    </div>
+
+  </div><!-- /wizard-wrap -->
+
+  <!-- LOADING -->
+  <div class="loading-wrap" id="loading">
+    <div class="spinner"></div>
+    <h3>Building your growth report…</h3>
+    <p>Our AI is analysing your goals and mapping the right equipA modules to your situation.</p>
+    <ul class="loading-steps">
+      <li id="ls-1">Analysing your business profile</li>
+      <li id="ls-2">Mapping growth targets to capacity gaps</li>
+      <li id="ls-3">Identifying relevant equipA modules</li>
+      <li id="ls-4">Building your 90-day action plan</li>
+      <li id="ls-5">Compiling your personalised roadmap</li>
+    </ul>
+  </div>
+
+  <!-- REPORT -->
+  <div class="report-wrap" id="report-wrap">
+    <div class="report-header">
+      <div>
+        <h2>Your equipA Growth Report</h2>
+        <p class="report-meta" id="report-meta"></p>
+      </div>
+      <div class="report-actions">
+        <button class="btn-restart" onclick="window.location.reload()">← Start again</button>
+        <button class="btn-download" onclick="downloadReport()">⬇ Download</button>
+      </div>
+    </div>
+    <div class="report-body" id="report-body"></div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">equip<span>A</span>.kiwi</div>
+      <div class="footer-copy">© 2026 equipA.kiwi — Built in Aotearoa 🌿</div>
+    </div>
+  </footer>
+
+  <script>
+    let currentStep = 1;
+    let selectedBottlenecks = [];
+    let reportHtml = '';
+    let businessName = '';
+
+    function goTo(next) {
+      // validate before advancing
+      if (next > currentStep) {
+        if (currentStep === 1) {
+          if (!v('f-name') || !v('f-industry') || !v('f-products')) {
+            show('err-1'); return;
+          }
+          hide('err-1');
+        }
+        if (currentStep === 2) {
+          if (!v('f-1yr')) { show('err-2'); return; }
+          hide('err-2');
+        }
+        if (currentStep === 3) {
+          if (!v('f-process')) { show('err-3'); return; }
+          hide('err-3');
+        }
+      }
+
+      document.getElementById('step-' + currentStep).classList.remove('active');
+      setDot(currentStep, 'done');
+
+      currentStep = next;
+      document.getElementById('step-' + currentStep).classList.add('active');
+      setDot(currentStep, 'active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setDot(n, state) {
+      const dot = document.getElementById('dot-' + n);
+      const prog = document.getElementById('prog-' + n);
+      dot.className = 'step-dot ' + state;
+      prog.className = 'prog-step ' + (state === 'active' ? 'active' : '');
+    }
+
+    function toggleB(el) {
+      el.classList.toggle('selected');
+      const val = el.dataset.value;
+      if (el.classList.contains('selected')) {
+        selectedBottlenecks.push(val);
+      } else {
+        selectedBottlenecks = selectedBottlenecks.filter(v => v !== val);
+      }
+    }
+
+    async function generateReport() {
+      const freeText = document.getElementById('f-bn-text').value.trim();
+      if (selectedBottlenecks.length === 0 && !freeText) {
+        show('err-4'); return;
+      }
+      hide('err-4');
+
+      businessName = v('f-name');
+
+      const payload = {
+        business: {
+          name: businessName,
+          industry: v('f-industry'),
+          revenue: v('f-revenue'),
+          teamSize: v('f-team'),
+          products: v('f-products'),
+        },
+        targets: {
+          oneYear: v('f-1yr'),
+          fiveYear: v('f-5yr'),
+          tenYear: v('f-10yr'),
+          productionGoals: v('f-prod-goals'),
+        },
+        process: {
+          description: v('f-process'),
+          workflow: v('f-workflow'),
+        },
+        bottlenecks: {
+          selected: selectedBottlenecks,
+          freeText,
+        },
+      };
+
+      document.getElementById('wizard').style.display = 'none';
+      document.getElementById('loading').classList.add('show');
+      animateSteps();
+
+      try {
+        const res = await fetch('/api/growth-report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        document.getElementById('loading').classList.remove('show');
+
+        if (data.success) {
+          reportHtml = data.report;
+          document.getElementById('report-body').innerHTML = reportHtml;
+          document.getElementById('report-meta').textContent =
+            (businessName || 'Your business') + ' · Generated ' +
+            new Date().toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
+          document.getElementById('report-wrap').classList.add('show');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          document.getElementById('wizard').style.display = 'block';
+          alert(data.error || 'Something went wrong. Please try again.');
+        }
+      } catch (e) {
+        document.getElementById('loading').classList.remove('show');
+        document.getElementById('wizard').style.display = 'block';
+        alert('Connection error. Please try again.');
+      }
+    }
+
+    function animateSteps() {
+      const ids = ['ls-1','ls-2','ls-3','ls-4','ls-5'];
+      let i = 0;
+      document.getElementById(ids[0]).classList.add('ls-active');
+      const iv = setInterval(() => {
+        if (i < ids.length) {
+          document.getElementById(ids[i]).classList.remove('ls-active');
+          document.getElementById(ids[i]).classList.add('ls-done');
+        }
+        i++;
+        if (i < ids.length) {
+          document.getElementById(ids[i]).classList.add('ls-active');
+        } else {
+          clearInterval(iv);
+        }
+      }, 3000);
+    }
+
+    function downloadReport() {
+      const date = new Date().toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
+      const doc = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>equipA Growth Report — ${businessName}</title>
+<style>
+  body{font-family:Arial,sans-serif;max-width:820px;margin:40px auto;padding:0 24px;color:#1a1a1a;line-height:1.72;font-size:15px}
+  h2{color:#0D2B4E;font-size:1.15rem;border-bottom:2px solid #00A99D;padding-bottom:8px;margin:32px 0 14px}
+  h3{color:#1A4070;font-size:1rem;margin:18px 0 8px}
+  p{margin-bottom:12px} ul,ol{margin:10px 0 14px 20px} li{margin-bottom:6px}
+  strong{color:#0D2B4E}
+  .hdr{border-bottom:3px solid #00A99D;padding-bottom:20px;margin-bottom:36px;display:flex;justify-content:space-between;align-items:flex-end}
+  .logo{color:#00A99D;font-weight:800;font-size:1.1rem}
+  .ftr{margin-top:48px;padding-top:20px;border-top:1px solid #ddd;color:#aaa;font-size:0.78rem;text-align:center}
+  @media print{body{margin:20px}}
+</style></head><body>
+<div class="hdr">
+  <div><div class="logo">equipA.kiwi</div>
+  <h1 style="margin:6px 0 4px;color:#0D2B4E;font-size:1.7rem">Business Growth Report</h1>
+  <div style="color:#555;font-size:0.9rem">${businessName || 'Your Business'}</div></div>
+  <div style="color:#888;font-size:0.85rem">Generated ${date}</div>
+</div>
+${reportHtml}
+<div class="ftr">Generated by equipA.kiwi — Aotearoa's industrial equipment ecosystem · equipa.rad.kiwi</div>
+</body></html>`;
+
+      const blob = new Blob([doc], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'equipA-growth-report-' + Date.now() + '.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+    function show(id) { document.getElementById(id).classList.add('show'); }
+    function hide(id) { document.getElementById(id).classList.remove('show'); }
+  </script>
+
+</body>
+</html>
