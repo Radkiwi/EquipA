@@ -107,6 +107,42 @@ async function updateLeadEmail(leadId, email) {
   }
 }
 
+// In-memory cache for approved hero images { slug: { url, expires } }
+const heroCache = new Map();
+const HERO_TTL = 30 * 60 * 1000; // 30 minutes
+
+const MODULE_TITLES = {
+  market: "Market", lab: "Lab", care: "Care", safe: "Safe",
+  learn: "Learn", loop: "Loop", finance: "Finance", sure: "Sure",
+};
+
+app.get("/api/cms/hero/:module", async (req, res) => {
+  const slug = req.params.module.toLowerCase();
+  const titlePrefix = MODULE_TITLES[slug];
+  if (!titlePrefix) return res.status(400).json({ url: null });
+
+  const cached = heroCache.get(slug);
+  if (cached && cached.expires > Date.now()) return res.json({ url: cached.url });
+
+  if (!base) return res.json({ url: null });
+
+  try {
+    const records = await base("Visual Asset Generation").select({
+      filterByFormula: `AND({Publish to Website}, FIND("${titlePrefix}", {Image Title}))`,
+      maxRecords: 1,
+      fields: ["Image Title", "Image (Generated)"],
+    }).firstPage();
+
+    const attachments = records[0]?.get("Image (Generated)");
+    const url = attachments?.[0]?.url || null;
+    heroCache.set(slug, { url, expires: Date.now() + HERO_TTL });
+    res.json({ url });
+  } catch (err) {
+    console.error("CMS hero error:", err.message);
+    res.json({ url: null });
+  }
+});
+
 app.post("/api/growth-report", growthLimiter, async (req, res) => {
   const { business, targets, process: proc, bottlenecks } = req.body;
 

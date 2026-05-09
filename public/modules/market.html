@@ -43,7 +43,10 @@
 
     /* HERO */
     .mod-hero { min-height:72vh; padding:130px 5% 80px; display:flex; align-items:center; position:relative; overflow:hidden; }
-    .mod-hero::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 0%,var(--accent-glow,rgba(0,169,157,0.18)) 0%,transparent 70%); pointer-events:none; }
+    .mod-hero::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 0%,var(--accent-glow,rgba(0,169,157,0.18)) 0%,transparent 70%); pointer-events:none; z-index:1; }
+    .hero-bg-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.8s ease; z-index:0; }
+    .hero-bg-img.loaded { opacity:0.35; }
+    .hero-inner { position:relative; z-index:2; }
     .hero-inner { max-width:900px; margin:0 auto; text-align:center; position:relative; }
     .mod-tag { display:inline-block; font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:5px 14px; border-radius:100px; border:1px solid var(--accent-color,var(--teal)); color:var(--accent-color,var(--teal)); margin-bottom:20px; }
     .mod-hero h1 { font-size:clamp(2rem,4.5vw,3.4rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; margin-bottom:22px; }
@@ -215,7 +218,8 @@
   <div class="accent-bar"></div>
 
   <!-- HERO -->
-  <section class="mod-hero">
+  <section class="mod-hero" id="mod-hero">
+    <img class="hero-bg-img" id="hero-bg" alt="" aria-hidden="true" />
     <div class="hero-inner">
       <div class="mod-tag">Marketplace</div>
       <h1>Find, Price, and Procure Industrial Machinery —<br/>in Days, Not Months</h1>
@@ -460,6 +464,18 @@
       if (x.isIntersecting) x.target.classList.add('visible');
     }), {threshold:0.1});
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Load approved hero image from CMS
+    fetch('/api/cms/hero/market')
+      .then(r => r.json())
+      .then(data => {
+        if (data.url) {
+          const img = document.getElementById('hero-bg');
+          img.onload = () => img.classList.add('loaded');
+          img.src = data.url;
+        }
+      })
+      .catch(() => {});
   </script>
 </body>
 </html>
