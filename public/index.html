@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>equipA.kiwi — NZ's Industrial Equipment Ecosystem</title>
+  <meta name="description" content="Connecting NZ research labs, manufacturers, hire fleets, auctioneers, and knowledge providers into a unified marketplace for industrial and scientific equipment sharing, sale, and maintenance." />
+  <meta property="og:title" content="equipA.kiwi — The Library of Everything for NZ Machinery" />
+  <meta property="og:description" content="New Zealand's full-stack industrial equipment ecosystem. Share, buy, maintain, and connect." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0D2B4E;
+      --navy-mid:   #1A4070;
+      --blue:       #1F4E79;
+      --teal:       #00A99D;
+      --teal-light: #00C9BB;
+      --amber:      #F5A623;
+      --white:      #FFFFFF;
+      --off-white:  #F0F6FB;
+      --text:       #0D1B2A;
+      --text-muted: #4A6080;
+      --border:     rgba(255,255,255,0.12);
+      --card-bg:    rgba(255,255,255,0.05);
+      --radius:     14px;
+      --shadow:     0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(13,27,46,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--teal-light); }
+    .nav-cta {
+      background: var(--teal); color: var(--navy) !important;
+      padding: 8px 20px; border-radius: 8px; font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--teal-light) !important; color: var(--navy) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding: 120px 5% 80px;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,169,157,0.18) 0%, transparent 70%),
+                  linear-gradient(160deg, #0D2B4E 0%, #0a1f38 60%, #081628 100%);
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center; max-width: 1200px; margin: 0 auto; width: 100%;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,169,157,0.15); border: 1px solid rgba(0,169,157,0.4);
+      border-radius: 100px; padding: 6px 16px; font-size: 0.8rem;
+      font-weight: 600; color: var(--teal-light); margin-bottom: 24px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .hero-badge .dot { width: 7px; height: 7px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-weight: 900; line-height: 1.08;
+      letter-spacing: -1.5px; margin-bottom: 24px;
+    }
+    h1 em { font-style: normal; color: var(--teal-light); }
+    .hero-sub {
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: rgba(255,255,255,0.72); line-height: 1.7;
+      margin-bottom: 40px; max-width: 540px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--teal); color: var(--navy);
+      padding: 14px 32px; border-radius: 10px; font-weight: 700;
+      font-size: 1rem; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 8px; transition: all 0.2s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,169,157,0.35); }
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      padding: 14px 32px; border-radius: 10px; font-weight: 600;
+      font-size: 1rem; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 8px; transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .btn-secondary:hover { border-color: var(--teal); color: var(--teal-light); transform: translateY(-2px); }
+
+    /* hero visual */
+    .hero-visual {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px;
+      backdrop-filter: blur(8px);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .hero-card:hover { transform: translateY(-4px); border-color: rgba(0,169,157,0.4); }
+    .hero-card.span2 { grid-column: span 2; }
+    .hero-card .module-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .hero-card h4 { font-size: 0.82rem; font-weight: 700; color: var(--teal-light); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+    .hero-card p { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+    .stat { font-size: 1.6rem; font-weight: 900; color: var(--amber); }
+
+    /* ── SECTION BASE ── */
+    section { padding: 100px 5%; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800; letter-spacing: -1px; line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    h2 em { font-style: normal; color: var(--teal-light); }
+    .section-sub { font-size: 1.1rem; color: rgba(255,255,255,0.65); max-width: 600px; line-height: 1.7; margin-bottom: 56px; }
+
+    /* ── PROBLEM ── */
+    .problem-section { background: linear-gradient(180deg, #0a1f38 0%, #081628 100%); }
+    .quote-block {
+      background: linear-gradient(135deg, rgba(0,169,157,0.1) 0%, rgba(245,166,35,0.08) 100%);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 32px 36px; margin-bottom: 56px;
+      position: relative;
+    }
+    .quote-block::before {
+      content: "\201C"; font-size: 6rem; line-height: 0;
+      color: var(--teal); opacity: 0.3;
+      position: absolute; top: 40px; left: 24px;
+    }
+    .quote-block p { font-size: 1.15rem; font-style: italic; color: rgba(255,255,255,0.88); line-height: 1.75; padding-left: 32px; }
+    .quote-attribution { margin-top: 16px; padding-left: 32px; font-size: 0.85rem; color: var(--teal-light); font-weight: 600; }
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .pain-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+      backdrop-filter: blur(8px);
+    }
+    .pain-icon { font-size: 2rem; margin-bottom: 14px; }
+    .pain-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .pain-card p { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+    /* ── SOLUTION MODULES ── */
+    .solution-section { background: #081628; }
+    .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .module-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 30px;
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .module-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .module-card.market::before { background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
+    .module-card.lab::before    { background: linear-gradient(90deg, #4B8CE8, #7AB4F5); }
+    .module-card.care::before   { background: linear-gradient(90deg, #E84B7A, #F57AB3); }
+    .module-card.safe::before   { background: linear-gradient(90deg, var(--amber), #F7C86A); }
+    .module-card.learn::before  { background: linear-gradient(90deg, #9B59B6, #C39BD3); }
+    .module-card.loop::before   { background: linear-gradient(90deg, #27AE60, #6FCF97); }
+    .module-card.finance::before{ background: linear-gradient(90deg, #E87B4B, #F5B08C); }
+    .module-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: rgba(255,255,255,0.2); }
+    .module-tag {
+      display: inline-block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 6px;
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
+      margin-bottom: 14px;
+    }
+    .module-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 10px; }
+    .module-card .subdomain { font-size: 0.8rem; color: var(--teal); font-weight: 600; margin-bottom: 14px; font-family: monospace; }
+    .module-card p { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.65; margin-bottom: 16px; }
+    .module-impact {
+      font-size: 0.82rem; font-weight: 600;
+      color: rgba(255,255,255,0.5); border-top: 1px solid var(--border);
+      padding-top: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .module-impact::before { content: "↗"; color: var(--teal); font-size: 1rem; }
+
+    /* ── STATS ── */
+    .stats-section {
+      background: linear-gradient(135deg, var(--navy-mid), var(--blue));
+      text-align: center;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 900px; margin: 0 auto; }
+    .stat-item .stat-num { font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 900; color: var(--teal-light); letter-spacing: -2px; line-height: 1; }
+    .stat-item .stat-label { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 8px; line-height: 1.4; }
+    .stat-item .stat-note { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+    /* ── TRACTION ── */
+    .traction-section { background: #0a1f38; }
+    .partners-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .partner-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+    }
+    .partner-card .partner-icon { font-size: 2.2rem; margin-bottom: 14px; }
+    .partner-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .partner-card p { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.65; }
+    .status-badge {
+      display: inline-block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.5px; padding: 3px 10px; border-radius: 100px;
+      margin-bottom: 12px;
+    }
+    .status-active { background: rgba(0,169,157,0.2); color: var(--teal-light); border: 1px solid rgba(0,169,157,0.4); }
+    .status-planned { background: rgba(245,166,35,0.15); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
+
+    /* ── LAYERS ── */
+    .layers-section { background: #081628; }
+    .layers-list { display: flex; flex-direction: column; gap: 16px; }
+    .layer-row {
+      display: grid; grid-template-columns: 220px 1fr auto;
+      gap: 24px; align-items: center;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 28px;
+      transition: border-color 0.2s;
+    }
+    .layer-row:hover { border-color: rgba(0,169,157,0.35); }
+    .layer-name { font-weight: 700; font-size: 0.95rem; }
+    .layer-desc { font-size: 0.875rem; color: rgba(255,255,255,0.6); }
+    .layer-count {
+      font-size: 1.5rem; font-weight: 900; color: var(--teal-light);
+      white-space: nowrap; text-align: right;
+    }
+    .layer-count span { font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.4); display: block; }
+
+    /* ── SIGNUP ── */
+    .signup-section {
+      background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(0,169,157,0.2) 0%, transparent 70%),
+                  linear-gradient(180deg, #081628 0%, var(--navy) 100%);
+      text-align: center; padding-bottom: 120px;
+    }
+    .signup-section h2 { margin-bottom: 12px; }
+    .signup-form-wrapper { max-width: 560px; margin: 40px auto 0; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-input {
+      width: 100%; padding: 14px 18px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; color: var(--white); font-size: 0.95rem;
+      font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.35); }
+    .form-input:focus { border-color: var(--teal); background: rgba(0,169,157,0.08); }
+    .form-input.full { grid-column: span 2; }
+    .form-submit {
+      width: 100%; padding: 16px;
+      background: var(--teal); border: none; border-radius: 10px;
+      color: var(--navy); font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+      margin-top: 4px;
+    }
+    .form-submit:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,169,157,0.35); }
+    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-message { margin-top: 16px; font-size: 0.9rem; min-height: 24px; }
+    .form-message.success { color: var(--teal-light); }
+    .form-message.error { color: #FF6B6B; }
+    .form-note { font-size: 0.78rem; color: rgba(255,255,255,0.35); margin-top: 12px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #060f1a; border-top: 1px solid var(--border);
+      padding: 40px 5%; text-align: center;
+    }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 20px; }
+    .footer-logo { font-size: 1.1rem; font-weight: 800; color: var(--white); }
+    .footer-logo span { color: var(--teal); }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--teal-light); }
+    .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.25); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .layer-row { grid-template-columns: 1fr; gap: 8px; }
+      .layer-count { text-align: left; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-input.full { grid-column: span 1; }
+      .nav-links { display: none; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">equip<span>A</span>.kiwi</a>
+    <ul class="nav-links">
+      <li><a href="#problem">The Problem</a></li>
+      <li><a href="#solution">The Platform</a></li>
+      <li><a href="#ecosystem">Ecosystem</a></li>
+      <li><a href="#signup" class="nav-cta">Join the Waitlist</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge"><span class="dot"></span> Building Aotearoa's Industrial Future</div>
+        <h1>The <em>Library of Everything</em> for NZ Machinery &amp; Productive Infrastructure</h1>
+        <p class="hero-sub">Connecting NZ research labs, manufacturers, hire fleets, auctioneers, and knowledge providers into a unified marketplace for industrial and scientific equipment — sharing, sale, and maintenance.</p>
+        <div class="hero-actions">
+          <a href="#signup" class="btn-primary">↗ Join the Ecosystem</a>
+          <a href="#solution" class="btn-secondary">Explore the Platform</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-card">
+          <div class="module-icon">🧪</div>
+          <h4>lab.equipA</h4>
+          <p>CRI &amp; university gear available to SMEs</p>
+        </div>
+        <div class="hero-card">
+          <div class="module-icon">🏭</div>
+          <h4>market.equipA</h4>
+          <p>New, used &amp; refurbished machinery</p>
+        </div>
+        <div class="hero-card">
+          <div class="module-icon">🔧</div>
+          <h4>care.equipA</h4>
+          <p>Lifecycle &amp; repair network</p>
+        </div>
+        <div class="hero-card">
+          <div class="module-icon">♻️</div>
+          <h4>loop.equipA</h4>
+          <p>Circular economy portal</p>
+        </div>
+        <div class="hero-card span2">
+          <div style="display:flex;gap:32px;flex-wrap:wrap;">
+            <div><div class="stat">97+</div><p style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Organisations mapped</p></div>
+            <div><div class="stat">$1.7B</div><p style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Annual R&amp;D spend</p></div>
+            <div><div class="stat">25%</div><p style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Workforce retiring</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem-section" id="problem">
+    <div class="section-inner">
+      <p class="section-label reveal">The Problem</p>
+      <h2 class="reveal">New Zealand's industrial ecosystem is <em>deeply fragmented</em></h2>
+      <p class="section-sub reveal">Millions in high-end equipment sit idle. Startups struggle to access what they need. And an entire generation of expertise is walking out the door.</p>
+
+      <div class="quote-block reveal">
+        <p>"I was in a kitchen with a small business owner who was in tears — incredibly frustrated because a processing kettle she had just spent her limited cash on wasn't working as she'd hoped. The toughest part was knowing that a larger, perfectly capable kettle was just sitting unused in storage at UoA."</p>
+        <div class="quote-attribution">— Real conversation, the reason equipA.kiwi exists</div>
+      </div>
+
+      <div class="pain-grid">
+        <div class="pain-card reveal">
+          <div class="pain-icon">🏚️</div>
+          <h3>Stranded Capital</h3>
+          <p>Millions in high-end R&amp;D equipment — mass spectrometers, bioreactors, flow cytometers — sit idle at CRIs and universities outside grant windows, earning nothing.</p>
+        </div>
+        <div class="pain-card reveal">
+          <div class="pain-icon">📦</div>
+          <h3>Complex Procurement</h3>
+          <p>Food businesses and manufacturers navigate a labyrinth of dealers, auctioneers, and hire companies with no unified portal, no price transparency, and no trusted network.</p>
+        </div>
+        <div class="pain-card reveal">
+          <div class="pain-icon">🧠</div>
+          <h3>The Knowledge Cliff</h3>
+          <p>A looming 25% workforce retirement will permanently erase decades of operational expertise on complex industrial machinery — unless we act now to capture it.</p>
+        </div>
+        <div class="pain-card reveal">
+          <div class="pain-icon">🌍</div>
+          <h3>Export Barriers</h3>
+          <p>Scaling a food product from bench-top to commercial export volumes requires prohibitive capital investment that locks out New Zealand's most innovative SMEs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <div class="section-inner">
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <div class="stat-num">$1.7B</div>
+          <div class="stat-label">Annual public research expenditure across NZ's CRIs and universities</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num">97+</div>
+          <div class="stat-label">Organisations mapped across 6 ecosystem layers — from Fab Labs to Crown Research Institutes</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num">5</div>
+          <div class="stat-label">NZFIN export-accredited food innovation pilot plants already proving the shared-access model</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Of NZ e-waste currently ends in landfill — recoverable assets lost forever</div>
+          <div class="stat-note">Source: NZ e-waste research</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="solution-section" id="solution">
+    <div class="section-inner">
+      <p class="section-label reveal">The Platform</p>
+      <h2 class="reveal">A full-stack ecosystem, <em>not just a classifieds site</em></h2>
+      <p class="section-sub reveal">Seven interconnected modules — each solving a distinct layer of the industrial disconnect — that together form Aotearoa's circular equipment economy.</p>
+
+      <div class="modules-grid">
+        <div class="module-card market reveal">
+          <div class="status-badge status-active">Core Module</div>
+          <div class="module-tag">Marketplace</div>
+          <h3>market.equipA</h3>
+          <div class="subdomain">market.equipa.kiwi</div>
+          <p>New, used, and refurbished machinery in one place. From CNC mills to centrifuges — transparent pricing, verified listings, and direct connections to NZ's leading equipment dealers and hire fleets.</p>
+          <div class="module-impact">Streamlines complex industrial procurement from months to days</div>
+        </div>
+        <div class="module-card lab reveal">
+          <div class="status-badge status-active">Core Module</div>
+          <div class="module-tag">Shared Access</div>
+          <h3>lab.equipA</h3>
+          <div class="subdomain">lab.equipa.kiwi</div>
+          <p>A shared access portal connecting businesses to underutilised R&amp;D and testing equipment at universities, CRIs, CoREs, and innovation parks. Book time on a mass spectrometer like a meeting room.</p>
+          <div class="module-impact">Unlocks idle assets at CRIs and universities for commercial R&amp;D</div>
+        </div>
+        <div class="module-card care reveal">
+          <div class="module-tag">Maintenance</div>
+          <h3>care.equipA</h3>
+          <div class="subdomain">care.equipa.kiwi</div>
+          <p>A lifecycle management and repair network connecting SMEs directly with certified local service technicians, calibration specialists, and heavy riggers for any piece of industrial equipment.</p>
+          <div class="module-impact">Connects every asset purchase to the expert who can keep it running</div>
+        </div>
+        <div class="module-card safe reveal">
+          <div class="module-tag">Compliance</div>
+          <h3>safe.equipA</h3>
+          <div class="subdomain">safe.equipa.kiwi</div>
+          <p>A compliance hub integrating custom SOPs, safety checklists, and operational documentation. Aligned with WorkSafe NZ guidelines and LEENZ lifting regulations — built into every equipment listing.</p>
+          <div class="module-impact">Streamlines H&amp;S compliance for every machine in the ecosystem</div>
+        </div>
+        <div class="module-card learn reveal">
+          <div class="module-tag">Knowledge</div>
+          <h3>learn.equipA</h3>
+          <div class="subdomain">learn.equipa.kiwi</div>
+          <p>An education and industrial training hub capturing legacy knowledge from retiring operators and transferring it to apprentices. Video libraries, machine-specific guides, and expert operator networks.</p>
+          <div class="module-impact">Preserves and transfers decades of specialist expertise before it retires</div>
+        </div>
+        <div class="module-card loop reveal">
+          <div class="module-tag">Circularity</div>
+          <h3>loop.equipA</h3>
+          <div class="subdomain">loop.equipa.kiwi</div>
+          <p>A circular economy portal facilitating trade-ins, refurbishment pathways, parts salvaging, and carbon tracking. Turns decommissioned assets into productive resources instead of landfill.</p>
+          <div class="module-impact">Closes the loop between end-of-life assets and new productive use</div>
+        </div>
+        <div class="module-card finance reveal">
+          <div class="module-tag">Finance</div>
+          <h3>finance.equipA</h3>
+          <div class="subdomain">finance.equipa.kiwi</div>
+          <p>Flexible financing options making capital-heavy equipment accessible to SMEs. Lease-to-own, fractional ownership models, and structured payment plans designed for NZ's industrial sector.</p>
+          <div class="module-impact">Lowers the capital barrier to productive infrastructure ownership</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECOSYSTEM LAYERS -->
+  <section class="layers-section" id="ecosystem">
+    <div class="section-inner">
+      <p class="section-label reveal">The Ecosystem</p>
+      <h2 class="reveal">Six layers, <em>one connected network</em></h2>
+      <p class="section-sub reveal">Every organisation in NZ's industrial and scientific ecosystem — mapped, catalogued, and ready to connect.</p>
+
+      <div class="layers-list">
+        <div class="layer-row reveal">
+          <div class="layer-name">🔬 Lab Layer</div>
+          <div class="layer-desc">Crown Research Institutes, Independent Research Organisations, Centres of Research Excellence, ITPs, and Wānanga — the backbone of NZ's scientific infrastructure.</div>
+          <div class="layer-count">21 <span>organisations</span></div>
+        </div>
+        <div class="layer-row reveal">
+          <div class="layer-name">🔄 Loop &amp; Market Layer</div>
+          <div class="layer-desc">Heavy plant hire operators, refurbished equipment dealers, and specialist industrial auctioneers building the circular secondary market.</div>
+          <div class="layer-count">20 <span>organisations</span></div>
+        </div>
+        <div class="layer-row reveal">
+          <div class="layer-name">🏭 Industrial Cluster Layer</div>
+          <div class="layer-desc">Regional manufacturing hubs, energy and engineering clusters, NZFIN food innovation parks, and agri-tech incubators across Aotearoa.</div>
+          <div class="layer-count">11 <span>organisations</span></div>
+        </div>
+        <div class="layer-row reveal">
+          <div class="layer-name">🛠️ Community &amp; Prototyping</div>
+          <div class="layer-desc">Fab Labs, independent makerspaces, and community hacklabs democratising access to the tools of technical invention.</div>
+          <div class="layer-count">8 <span>organisations</span></div>
+        </div>
+        <div class="layer-row reveal">
+          <div class="layer-name">♻️ Asset Recovery Layer</div>
+          <div class="layer-desc">Insolvency and liquidation firms, IT and scientific asset recovery specialists, and industrial metal recyclers forming the foundational supply chain.</div>
+          <div class="layer-count">18 <span>organisations</span></div>
+        </div>
+        <div class="layer-row reveal">
+          <div class="layer-name">🧠 Knowledge Cliff Layer</div>
+          <div class="layer-desc">Heavy machinery maintenance, food machinery specialists, metrology and calibration labs, and specialised rigging firms — the expertise that keeps the ecosystem operational.</div>
+          <div class="layer-count">19 <span>organisations</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACTION -->
+  <section class="traction-section" id="traction">
+    <div class="section-inner">
+      <p class="section-label reveal">Current Traction</p>
+      <h2 class="reveal">Pulling the trigger <em>right now</em></h2>
+      <p class="section-sub reveal">We're actively engaging with key national players to validate, build, and launch the equipA.kiwi ecosystem.</p>
+
+      <div class="partners-grid">
+        <div class="partner-card reveal">
+          <div class="status-badge status-active">Active Engagement</div>
+          <div class="partner-icon">🎓</div>
+          <h3>University of Auckland</h3>
+          <p>Starting the conversation on how to catalogue their massive, underutilised equipment inventory and tap into their ~40,000-strong network of students, researchers, and alumni.</p>
+        </div>
+        <div class="partner-card reveal">
+          <div class="status-badge status-active">Active Engagement</div>
+          <div class="partner-icon">⚙️</div>
+          <h3>Aurecon</h3>
+          <p>Opening a dialogue with Technical Directors to leverage their network of ~18,600 engineers across Australia and New Zealand — and their deep expertise in industrial asset management.</p>
+        </div>
+        <div class="partner-card reveal">
+          <div class="status-badge status-planned">In Preparation</div>
+          <div class="partner-icon">📋</div>
+          <h3>National Feasibility Study</h3>
+          <p>Preparing a $135k feasibility study proposal aimed at MBIE and Trade Me to validate the national rollout, quantify the addressable market, and secure early institutional backing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section class="signup-section" id="signup">
+    <div class="section-inner">
+      <p class="section-label">Get Early Access</p>
+      <h2>Ready to stop reinventing the wheel<br/>and <em>start sharing the load?</em></h2>
+      <p style="color:rgba(255,255,255,0.6);font-size:1rem;margin-top:8px;">Join the waitlist. Be first to access the platform and help shape what gets built next.</p>
+
+      <div class="signup-form-wrapper">
+        <form id="signupForm">
+          <div class="form-grid">
+            <input class="form-input" type="text" name="name" placeholder="Your name" autocomplete="name" />
+            <input class="form-input" type="email" name="email" placeholder="Email address *" required autocomplete="email" />
+            <input class="form-input" type="text" name="organisation" placeholder="Organisation / Company" />
+            <select class="form-input" name="role">
+              <option value="" style="background:#0D2B4E;">Your role in the ecosystem</option>
+              <option value="Research / CRI / University" style="background:#0D2B4E;">Research / CRI / University</option>
+              <option value="Manufacturer / Fabricator" style="background:#0D2B4E;">Manufacturer / Fabricator</option>
+              <option value="Food Producer / Processor" style="background:#0D2B4E;">Food Producer / Processor</option>
+              <option value="Equipment Dealer / Hire" style="background:#0D2B4E;">Equipment Dealer / Hire</option>
+              <option value="Auctioneer / Liquidator" style="background:#0D2B4E;">Auctioneer / Liquidator</option>
+              <option value="Maintenance / Calibration" style="background:#0D2B4E;">Maintenance / Calibration</option>
+              <option value="Community / Makerspace" style="background:#0D2B4E;">Community / Makerspace</option>
+              <option value="Investor / Advisor" style="background:#0D2B4E;">Investor / Advisor</option>
+              <option value="Other" style="background:#0D2B4E;">Other</option>
+            </select>
+          </div>
+          <button type="submit" class="form-submit" id="submitBtn">Kia ora — Join the Ecosystem ↗</button>
+        </form>
+        <div class="form-message" id="formMessage"></div>
+        <p class="form-note">No spam. Ever. Just updates when we're ready to launch. Kia kaha.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">equip<span>A</span>.kiwi</div>
+      <ul class="footer-links">
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#solution">Platform</a></li>
+        <li><a href="#ecosystem">Ecosystem</a></li>
+        <li><a href="#signup">Join</a></li>
+        <li><a href="https://github.com/Radkiwi/EquipA" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 equipA.kiwi — Built in Aotearoa New Zealand 🌿</div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Signup form
+    const form = document.getElementById('signupForm');
+    const msg = document.getElementById('formMessage');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      msg.className = 'form-message';
+      msg.textContent = '';
+
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        organisation: form.organisation.value.trim(),
+        role: form.role.value,
+      };
+
+      try {
+        const res = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (json.success) {
+          msg.className = 'form-message success';
+          msg.textContent = '🌿 ' + json.message + ' We\'ll be in touch.';
+          form.reset();
+        } else {
+          throw new Error(json.error || 'Something went wrong.');
+        }
+      } catch (err) {
+        msg.className = 'form-message error';
+        msg.textContent = err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Kia ora — Join the Ecosystem ↗';
+      }
+    });
+  </script>
+</body>
+</html>
